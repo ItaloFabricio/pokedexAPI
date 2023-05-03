@@ -55,6 +55,10 @@ body{
     outline: none;
 }
 
+#pkmnNameTitle{
+    text-transform: capitalize;
+}
+
 #poke-image-placeholder{
     display: flex;
     justify-content: center;

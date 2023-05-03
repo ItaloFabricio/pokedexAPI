@@ -9,6 +9,7 @@ const barOuter = document.querySelectorAll('.bar-outer');
 const statDesc = document.querySelectorAll('.stat-desc');
 const baseStats = document.querySelector('#base-stat');
 const pokedex = document.querySelector('#pokedex');
+const pkmNameTitle = document.querySelector('#pkmnNameTitle');
 
 const typeColors = {
     "rock":     [182, 158,  49],
@@ -54,10 +55,13 @@ search.addEventListener('change', async (event) =>{
         return;
    }
 
+
+
    //Main pokemon color, in order to change UI theme
    const mainColor = typeColors[pkmnData.types[0].type.name];
    baseStats.style.color = `rgb(${mainColor[0]}, ${mainColor[1]} , ${mainColor[2]})`;
    pokedex.style.backgroundColor = `rgb(${mainColor[0]}, ${mainColor[1]} , ${mainColor[2]})`;
+   pkmNameTitle.textContent = pkmnData.name;
 
    //Sets pokemon # at the top of the page
    number.innerHTML = '#' + pkmnData.id.toString().padStart(3, '0');
@@ -75,7 +79,7 @@ search.addEventListener('change', async (event) =>{
 
         newType.innerHTML = t.type.name;
         newType.classList.add('type');
-        newType.style.backgroundColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`
+        newType.style.backgroundColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
 
         types.appendChild(newType);
    })

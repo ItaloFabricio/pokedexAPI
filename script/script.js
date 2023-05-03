@@ -3,6 +3,12 @@ const number = document.querySelector('#number');
 const pokemonImage = document.querySelector('#pokemon-image');
 const type = document.querySelectorAll('.type');
 const types = document.querySelector('#types');
+const statNumber = document.querySelectorAll('.stat-number');
+const barInner = document.querySelectorAll('.bar-inner');
+const barOuter = document.querySelectorAll('.bar-outer');
+const statDesc = document.querySelectorAll('.stat-desc');
+const baseStats = document.querySelector('#base-stat');
+const pokedex = document.querySelector('#pokedex');
 
 const typeColors = {
     "rock":     [182, 158,  49],
@@ -36,14 +42,22 @@ const fetchApi = async (pkmnName) => {
         return pkmnData;
     }
 
-    return pkmnData
+    return false;
 }
 
 search.addEventListener('change', async (event) =>{
-   const pkmnData = await fetchApi(event.target.value)
+   const pkmnData = await fetchApi(event.target.value);
 
    //Validation when Pokémon does not exist
-   if(!pkmnData) alert('Pokémon does not exist')
+   if(!pkmnData){
+        alert('Pokémon does not exist.');
+        return;
+   }
+
+   //Main pokemon color, in order to change UI theme
+   const mainColor = typeColors[pkmnData.types[0].type.name];
+   baseStats.style.color = `rgb(${mainColor[0]}, ${mainColor[1]} , ${mainColor[2]})`;
+   pokedex.style.backgroundColor = `rgb(${mainColor[0]}, ${mainColor[1]} , ${mainColor[2]})`;
 
    //Sets pokemon # at the top of the page
    number.innerHTML = '#' + pkmnData.id.toString().padStart(3, '0');
@@ -61,8 +75,18 @@ search.addEventListener('change', async (event) =>{
 
         newType.innerHTML = t.type.name;
         newType.classList.add('type');
-        newType.style.backgroundColor = `rgb(${color[t.type.name][0]}, ${color[t.type.name][1]}, ${color[t.type.name][2]})`
+        newType.style.backgroundColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`
 
         types.appendChild(newType);
    })
+
+   //Updates Stats and stats bars
+   pkmnData.stats.forEach((s, i) =>{
+    statNumber[i].innerHTML = s.base_stat.toString().padStart(3, '0');
+    barInner[i].style.width = `${s.base_stat}%`;
+    barInner[i].style.backgroundColor = `rgb(${mainColor[0]}, ${mainColor[1]} , ${mainColor[2]})`;
+    barOuter[i].style.backgroundColor = `rgba(${mainColor[0]}, ${mainColor[1]} , ${mainColor[2]}, 0.3)`;
+    statDesc[i].style.color = `rgb(${mainColor[0]}, ${mainColor[1]} , ${mainColor[2]})`;
+   })
+
 })
